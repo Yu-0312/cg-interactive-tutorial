@@ -50,7 +50,7 @@
         d[i + 3] = 255;
       }
     }
-    ctx.putImageData(img, 0, 0);
+    RL.blitPixels(ctx, canvas, img);
   }
 
   function init() {

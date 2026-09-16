@@ -170,6 +170,19 @@
     return Number(n).toFixed(d);
   }
 
+  /* putImageData ignores ctx transform; blit via temp canvas for HiDPI */
+  function blitPixels(ctx, canvas, imageData) {
+    const tmp = blitPixels._c || (blitPixels._c = document.createElement("canvas"));
+    tmp.width = imageData.width;
+    tmp.height = imageData.height;
+    tmp.getContext("2d").putImageData(imageData, 0, 0);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(tmp, 0, 0, canvas.width, canvas.height);
+    ctx.restore();
+  }
+
   window.RL = {
     loadProgress,
     saveProgress,
@@ -182,6 +195,7 @@
     bindLessonProgress,
     showWeekProgress,
     fitCanvas,
+    blitPixels,
     lerpColor,
     formatNum,
   };

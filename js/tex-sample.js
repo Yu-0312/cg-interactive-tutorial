@@ -42,16 +42,15 @@
       for (let x = 0; x < W; x++) {
         const u = (x / W) * zoom;
         const v = (y / H) * zoom * (H / W);
-        const c = mode === "nn" ? texBilinear(u, v) : texBilinear(u, v);
-        // for nn, snap
+        // nearest: snap to texel center; bilinear: interpolate
         const cc = mode === "nn"
-          ? texF(Math.floor(u * 8) / 8 + 1 / 16, Math.floor(v * 8) / 8 + 1 / 16)
-          : c;
+          ? texF((Math.floor(u * 8) + 0.5) / 8, (Math.floor(v * 8) + 0.5) / 8)
+          : texBilinear(u, v);
         const i = (y * W + x) * 4;
         d[i] = cc[0]; d[i + 1] = cc[1]; d[i + 2] = cc[2]; d[i + 3] = 255;
       }
     }
-    ctx.putImageData(img, 0, 0);
+    RL.blitPixels(ctx, canvas, img);
   }
 
   function init() {

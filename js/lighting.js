@@ -59,7 +59,7 @@
         data[i + 3] = 255;
       }
     }
-    ctx.putImageData(img, 0, 0);
+    RL.blitPixels(ctx, canvas, img);
 
     // light gizmo
     const gx = cx + L[0] * R * 1.15;
