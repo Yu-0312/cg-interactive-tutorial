@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第 13 週 · 姿態與動畫 — 電腦圖學互動教學</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-lesson="13">
+  <header class="topnav" id="topnav"></header>
+  <div class="wrap lesson-layout">
+    <aside class="toc">
+      <a href="#pose">姿態表示</a>
+      <a href="#key">關鍵幀</a>
+      <a href="#slerp">四元數插值</a>
+      <a href="#skin">蒙皮</a>
+      <a href="#tips">動畫清單</a>
+    </aside>
+    <article class="prose">
+      <div class="week-label">第 13 週</div>
+      <h1>建模與階層（二）：姿態與動畫</h1>
+      <p>
+        一「幀」姿態 = 每個骨骼的局部變換。動畫是在時間上插值這些變換。
+      </p>
+
+      <h2 id="pose">姿態表示</h2>
+      <ul>
+        <li>TR S 或 T + 四元數 + 縮放。</li>
+        <li>相對於綁定姿態（bind pose / T-pose）的偏移。</li>
+      </ul>
+
+      <h2 id="key">關鍵幀動畫</h2>
+      <ol>
+        <li>在關鍵時間打關鍵幀。</li>
+        <li>通道插值：位置線性、旋轉 slerp、縮放線性。</li>
+        <li>曲線編輯（切線、緩入緩出）。</li>
+      </ol>
+
+      <h2 id="slerp">為何旋轉用 slerp</h2>
+      <p>
+        歐拉角 lerp 會走非最短弧且有萬向鎖。
+        四元數球面線性插值保持單位長度與角速度較均勻。
+      </p>
+      <div class="formula">slerp(q₀, q₁, t) = q₀ · sin((1−t)Ω)/sinΩ + q₁ · sin(tΩ)/sinΩ</div>
+
+      <h2 id="skin">蒙皮（Skinning）</h2>
+      <div class="formula">v' = Σ<sub>i</sub> w<sub>i</sub> · M<sub>bone,i</sub> · v</div>
+      <ul>
+        <li>每頂點通常 1–4 根骨骼權重。</li>
+        <li>GPU 在頂點著色器做矩陣調色盤。</li>
+      </ul>
+
+      <h2 id="tips">動畫清單</h2>
+      <div class="card">
+        <ul>
+          <li>時間軸用秒，不要用幀號寫死。</li>
+          <li>混合樹 / 狀態機管理 clip 過渡。</li>
+          <li>IK（反向運動學）處理腳部貼地、手抓握。</li>
+        </ul>
+      </div>
+
+      <div class="quiz" data-answer="1" data-ok="正確——slerp 在球面上插值，避免萬向鎖與非均勻角速度。" data=no="歐拉角直接 lerp 有問題。">
+        <h3>快速檢核</h3>
+        <div class="q">旋轉動畫偏好？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt">歐拉角線性插值</button>
+          <button class="quiz-opt">四元數 slerp</button>
+          <button class="quiz-opt">矩陣元素直接 lerp</button>
+          <button class="quiz-opt">只存位置，忽略旋轉</button>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <nav class="lesson-nav">
+        <a href="12-hierarchy.html"><span class="dir">← 上一課</span><span class="title">第 12 週 · 階層</span></a>
+        <a href="14-procedural.html"><span class="dir">下一課</span><span class="title">第 14 週 · 程序式方法</span></a>
+      </nav>
+    </article>
+  </div>
+  <script src="../js/app.js"></script>
+  <script>
+    RL.renderTopNav();
+    RL.bindToc();
+    RL.bindQuizzes();
+    RL.bindLessonProgress();
+  </script>
+</body>
+</html>

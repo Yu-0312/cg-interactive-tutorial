@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第 14 週 · 程序式方法 — 電腦圖學互動教學</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-lesson="14">
+  <header class="topnav" id="topnav"></header>
+  <div class="wrap lesson-layout">
+    <aside class="toc">
+      <a href="#why">為何程序式</a>
+      <a href="#noise">雜訊</a>
+      <a href="#lsys">L-system</a>
+      <a href="#demo">雜訊演示</a>
+      <a href="#use">應用場景</a>
+    </aside>
+    <article class="prose">
+      <div class="week-label">第 14 週 · 互動</div>
+      <h1>程序式方法（一）</h1>
+      <p>
+        用規則與雜訊「長出」內容，而不是手動雕刻每一個三角形。
+        好處：省工、可無限細節、參數可控。
+      </p>
+
+      <h2 id="why">程序式的價值</h2>
+      <ul>
+        <li>內容管線可擴展（開世界、植被、城市）。</li>
+        <li>可重現：同一種子 → 同一結果。</li>
+        <li>可與藝術家參數（旋鈕）結合。</li>
+      </ul>
+
+      <h2 id="noise">雜訊家族</h2>
+      <table class="cmp">
+        <thead><tr><th>類型</th><th>特徵</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td>Value noise</td><td>格子隨機 + 插值</td><td>入門、雲霧</td></tr>
+          <tr><td>Perlin / Simplex</td><td>梯度導向，更自然</td><td>地形、大理石</td></tr>
+          <tr><td>fBm</td><td>多八度疊加</td><td>細節層次</td></tr>
+          <tr><td>Worley</td><td>最近特徵點距離</td><td>細胞、熔岩</td></tr>
+        </tbody>
+      </table>
+      <div class="formula">fBm(x) = Σ<sub>i</sub> amp<sup>i</sup> · noise(freq<sup>i</sup> · x)</div>
+
+      <h2 id="lsys">L-system（林氏系統）</h2>
+      <p>
+        並行重寫字串，再把字串解釋成筆畫指令（前進、轉角、推/ pop 狀態）。
+        經典用於植物、分形。
+      </p>
+      <pre><code>axiom: F
+rule:  F → F[+F]F[-F]F
+// F 前進, +/- 轉角, [] 保存/恢復狀態</code></pre>
+
+      <h2 id="demo">互動：fBm 雜訊</h2>
+      <div class="demo">
+        <div class="demo-head">
+          <h3><span class="badge">互動</span> 分數布朗運動</h3>
+          <div class="controls">
+            <label>八度 <input type="range" id="nz-oct" min="1" max="6" step="1" value="4" /> <span id="nz-oct-v">4</span></label>
+            <label>增益 <input type="range" id="nz-gain" min="0.2" max="0.8" step="0.05" value="0.5" /> <span id="nz-gain-v">0.50</span></label>
+            <button class="btn btn-primary btn-sm" id="nz-reseed">換種子</button>
+          </div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="nz-canvas" width="400" height="280"></canvas>
+        </div>
+      </div>
+
+      <h2 id="use">應用場景</h2>
+      <ul>
+        <li>地形高度場 + 貼圖混合權重</li>
+        <li>植被散佈（泊松盤採樣）</li>
+        <li>程序式材質（shader 內算 UV 樣式）</li>
+      </ul>
+
+      <div class="quiz" data-answer="1" data-ok="正確——fBm 多八度疊加產生細節層次。" data=no="單一頻率雜訊太平。">
+        <h3>快速檢核</h3>
+        <div class="q">fBm 是什麼？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt">一種貼圖壓縮格式</button>
+          <button class="quiz-opt">多個頻率/振幅的雜訊疊加</button>
+          <button class="quiz-opt">深度緩衝別名</button>
+          <button class="quiz-opt">骨骼動畫混合</button>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <nav class="lesson-nav">
+        <a href="13-hierarchy-2.html"><span class="dir">← 上一課</span><span class="title">第 13 週 · 動畫</span></a>
+        <a href="15-procedural-2.html"><span class="dir">下一課</span><span class="title">第 15 週 · 程序式貼圖</span></a>
+      </nav>
+    </article>
+  </div>
+  <script src="../js/app.js"></script>
+  <script src="../js/noise.js"></script>
+  <script>
+    RL.renderTopNav();
+    RL.bindToc();
+    RL.bindQuizzes();
+    RL.bindLessonProgress();
+  </script>
+</body>
+</html>

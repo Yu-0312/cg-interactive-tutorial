@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第 17 週 · 曲線與曲面 — 電腦圖學互動教學</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-lesson="17">
+  <header class="topnav" id="topnav"></header>
+  <div class="wrap lesson-layout">
+    <aside class="toc">
+      <a href="#why">為何曲線</a>
+      <a href="#bezier">Bézier</a>
+      <a href="#bspline">B-spline / NURBS</a>
+      <a href="#demo">控制點演示</a>
+      <a href="#surf">曲面</a>
+    </aside>
+    <article class="prose">
+      <div class="week-label">第 17 週 · 互動</div>
+      <h1>曲線與曲面</h1>
+      <p>
+        角色、車殼、字型、路徑動畫——都需要參數化曲線與曲面，
+        而不是只有三角網格。
+      </p>
+
+      <h2 id="why">參數曲線的優點</h2>
+      <ul>
+        <li>解析、可任意解析度細分。</li>
+        <li>連續性可控（C0/C1/C2）。</li>
+        <li>編輯控制點即可造型。</li>
+      </ul>
+
+      <h2 id="bezier">Bézier 曲線</h2>
+      <p>三次 Bézier（4 控制點）：</p>
+      <div class="formula">B(t) = (1−t)³ P₀ + 3(1−t)² t P₁ + 3(1−t) t² P₂ + t³ P₃</div>
+      <ul>
+        <li>端點插值性質：B(0)=P₀, B(1)=P₃。</li>
+        <li>凸包性質：曲線落在控制點凸包內。</li>
+        <li>多段拼接需共線控制點保 C1。</li>
+      </ul>
+
+      <h2 id="bspline">B-spline 與 NURBS</h2>
+      <ul>
+        <li>B-spline：局部支撐，改一點只動一段。</li>
+        <li>NURBS：加權有理，可精確表示圓錐曲線。</li>
+        <li>CAD 與工業造型主流。</li>
+      </ul>
+
+      <h2 id="demo">互動：拖曳 Bézier 控制點</h2>
+      <div class="demo">
+        <div class="demo-head">
+          <h3><span class="badge">互動</span> 三次 Bézier</h3>
+          <div class="controls">
+            <label>細分 <input type="range" id="bz-n" min="4" max="64" step="1" value="24" /> <span id="bz-n-v">24</span></label>
+            <button class="btn btn-ghost btn-sm" id="bz-reset">重置</button>
+          </div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="bz-canvas" width="520" height="320"></canvas>
+        </div>
+        <div class="demo-stats">
+          <div class="stat"><span class="k">提示</span><span class="v" style="font-size:0.8rem">拖曳方形控制點</span></div>
+        </div>
+      </div>
+
+      <h2 id="surf">曲面</h2>
+      <ul>
+        <li>Bézier patch / B-spline surface：雙參數 (u,v)。</li>
+        <li>細分曲面（Catmull-Clark）：遊戲與電影常用。</li>
+        <li>位移貼圖 + 細分 = 幾何細節。</li>
+      </ul>
+
+      <div class="quiz" data-answer="1" data-ok="正確——端點插值是 Bézier 的基本性質。" data=no="回想 B(0) 與 B(1)。">
+        <h3>快速檢核</h3>
+        <div class="q">Bézier 曲線通過？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt">所有控制點</button>
+          <button class="quiz-opt">首尾控制點</button>
+          <button class="quiz-opt">從不通過任何控制點</button>
+          <button class="quiz-opt">只有重心</button>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <nav class="lesson-nav">
+        <a href="15-procedural-2.html"><span class="dir">← 上一課</span><span class="title">第 15 週 · 程序式貼圖</span></a>
+        <a href="../index.html"><span class="dir">首頁</span><span class="title">回到課綱</span></a>
+      </nav>
+    </article>
+  </div>
+  <script src="../js/app.js"></script>
+  <script src="../js/bezier.js"></script>
+  <script>
+    RL.renderTopNav();
+    RL.bindToc();
+    RL.bindQuizzes();
+    RL.bindLessonProgress();
+  </script>
+</body>
+</html>

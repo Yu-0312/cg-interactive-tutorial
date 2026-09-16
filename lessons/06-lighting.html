@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第 6 週 · 光照與著色 — 電腦圖學互動教學</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-lesson="6">
+  <header class="topnav" id="topnav"></header>
+  <div class="wrap lesson-layout">
+    <aside class="toc">
+      <a href="#normals">法線</a>
+      <a href="#phong">Phong 模型</a>
+      <a href="#lights">光源類型</a>
+      <a href="#demo">可拖曳光源</a>
+      <a href="#tips">實作細節</a>
+    </aside>
+    <article class="prose">
+      <div class="week-label">第 6 週 · 互動</div>
+      <h1>光照與著色（一）</h1>
+      <p>
+        著色（shading）決定每個 fragment 的顏色。經典起點是
+        <strong>Phong</strong>：環境 + 漫反射 + 高光。
+      </p>
+
+      <h2 id="normals">法線</h2>
+      <p>
+        法線 $\mathbf{n}$ 表示表面朝向。非均勻縮放時要用
+        <strong>法線矩陣</strong> $(M^{-1})^T$，不能直接用模型矩陣。
+      </p>
+
+      <h2 id="phong">Phong 著色</h2>
+      <div class="formula">I = k<sub>a</sub> i<sub>a</sub> + k<sub>d</sub> (L·N) i<sub>d</sub> + k<sub>s</sub> (R·V)<sup>α</sup> i<sub>s</sub></div>
+      <ul>
+        <li>環境項：粗略全局光。</li>
+        <li>漫反射：Lambert 餘弦定律，與視角無關。</li>
+        <li>高光：反射向量 R 與視線 V 的夾角，指數 α 控制銳利度。</li>
+      </ul>
+
+      <h2 id="lights">光源類型</h2>
+      <table class="cmp">
+        <thead><tr><th>類型</th><th>方向/位置</th><th>衰減</th></tr></thead>
+        <tbody>
+          <tr><td>方向光</td><td>只有方向（太陽）</td><td>通常無</td></tr>
+          <tr><td>點光</td><td>位置</td><td>1/d²</td></tr>
+          <tr><td>聚光燈</td><td>位置 + 錐角</td><td>1/d² + 錐形衰減</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="demo">互動：拖曳光源</h2>
+      <div class="demo">
+        <div class="demo-head">
+          <h3><span class="badge">互動</span> Phong 球體著色</h3>
+          <div class="controls">
+            <label>高光 α <input type="range" id="lt-alpha" min="2" max="128" step="1" value="32" /> <span id="lt-alpha-v">32</span></label>
+            <label>環境 <input type="range" id="lt-ka" min="0" max="0.5" step="0.01" value="0.08" /> <span id="lt-ka-v">0.08</span></label>
+            <button class="btn btn-ghost btn-sm" id="lt-reset">重置光源</button>
+          </div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="lt-canvas" width="420" height="320"></canvas>
+        </div>
+        <div class="demo-stats">
+          <div class="stat"><span class="k">提示</span><span class="v" style="font-size:0.8rem">拖曳畫布上的光源點</span></div>
+        </div>
+      </div>
+
+      <h2 id="tips">實作細節</h2>
+      <ul>
+        <li>在視覺空間或世界空間算光照皆可，但要一致。</li>
+        <li>法線要正規化；插值後再正規化一次。</li>
+        <li>能量守恒：改用 Lambert / Blinn-Phong 更物理。</li>
+      </ul>
+
+      <div class="quiz" data-answer="1" data-ok="正確——漫反射是 max(0, L·N) 類型的餘弦項。" data=no="高光才用反射向量。">
+        <h3>快速檢核</h3>
+        <div class="q">漫反射主要依賴？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt">視線與反射向量的夾角</button>
+          <button class="quiz-opt">光線與法線的夾角（L·N）</button>
+          <button class="quiz-opt">只依賴環境光</button>
+          <button class="quiz-opt">頂點顏色平均</button>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <nav class="lesson-nav">
+        <a href="05-viewing.html"><span class="dir">← 上一課</span><span class="title">第 5 週 · 檢視</span></a>
+        <a href="07-shading.html"><span class="dir">下一課</span><span class="title">第 7 週 · 著色方式</span></a>
+      </nav>
+    </article>
+  </div>
+  <script src="../js/app.js"></script>
+  <script src="../js/lighting.js"></script>
+  <script>
+    RL.renderTopNav();
+    RL.bindToc();
+    RL.bindQuizzes();
+    RL.bindLessonProgress();
+  </script>
+</body>
+</html>

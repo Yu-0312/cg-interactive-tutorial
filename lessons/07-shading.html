@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第 7 週 · 著色方式 — 電腦圖學互動教學</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-lesson="7">
+  <header class="topnav" id="topnav"></header>
+  <div class="wrap lesson-layout">
+    <aside class="toc">
+      <a href="#blinn">Blinn-Phong</a>
+      <a href="#gouraud">Gouraud vs Phong</a>
+      <a href="#normals">法線著色</a>
+      <a href="#demo">比較演示</a>
+      <a href="#modern">現代延伸</a>
+    </aside>
+    <article class="prose">
+      <div class="week-label">第 7 週 · 互動</div>
+      <h1>光照與著色（二）：Blinn-Phong 與著色頻率</h1>
+      <p>
+        這週比較經典改良與「算在哪裡」：頂點著色 vs 像素著色，
+        以及為何 Blinn-Phong 成為實務預設。
+      </p>
+
+      <h2 id="blinn">Blinn-Phong</h2>
+      <p>用半程向量 $\mathbf{h} = \mathrm{normalize}(\mathbf{L}+\mathbf{V})$ 取代反射向量：</p>
+      <div class="formula">specular ∝ (N · H)<sup>α</sup></div>
+      <ul>
+        <li>避免顯式算反射，較便宜。</li>
+        <li>掠射角附近更穩，較少破圖。</li>
+      </ul>
+
+      <h2 id="gouraud">Gouraud vs Phong 著色</h2>
+      <table class="cmp">
+        <thead><tr><th></th><th>Gouraud（頂點）</th><th>Phong（像素）</th></tr></thead>
+        <tbody>
+          <tr><td>算光照</td><td>頂點，再插值顏色</td><td>每 fragment 插值法線後再算</td></tr>
+          <tr><td>高光</td><td>可能出現塊狀 / 丟失</td><td>平滑銳利</td></tr>
+          <tr><td>成本</td><td>低</td><td>高</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="normals">法線著色（Flat）</h2>
+      <p>
+        每個三角形一個法線 → 低多邊形風格。
+        插值法線（smooth shading）需要<strong>頂點法線</strong>（常由相鄰面平均）。
+      </p>
+
+      <h2 id="demo">互動：高光指數比較</h2>
+      <div class="demo">
+        <div class="demo-head">
+          <h3><span class="badge">互動</span> 高光 α 與 Blinn</h3>
+          <div class="controls">
+            <label>α <input type="range" id="bp-alpha" min="2" max="128" step="1" value="48" /> <span id="bp-alpha-v">48</span></label>
+            <label><input type="checkbox" id="bp-use" checked /> 使用 Blinn（H·N）</label>
+          </div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="bp-canvas" width="420" height="280"></canvas>
+        </div>
+        <div class="demo-stats">
+          <div class="stat"><span class="k">目前模型</span><span class="v" id="bp-mode">Blinn-Phong</span></div>
+        </div>
+      </div>
+
+      <h2 id="modern">現代延伸</h2>
+      <ul>
+        <li>基於物理（PBR）：金屬度/粗糙度、能量守恒。</li>
+        <li>延遲著色：先寫 G-buffer，再逐光源。</li>
+        <li>全域光照：路徑追蹤、輻射度、探針。</li>
+      </ul>
+
+      <div class="quiz" data-answer="0" data-ok="正確——Blinn 用半程向量 H，避免算反射向量。" data=no="回想 h = normalize(L+V)。">
+        <h3>快速檢核</h3>
+        <div class="q">Blinn-Phong 相對 Phong 的關鍵改動？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt">用 N·H（半程向量）取代 R·V</button>
+          <button class="quiz-opt">去掉漫反射項</button>
+          <button class="quiz-opt">只在頂點算一次環境光</button>
+          <button class="quiz-opt">把法線改成世界座標顏色</button>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <nav class="lesson-nav">
+        <a href="06-lighting.html"><span class="dir">← 上一課</span><span class="title">第 6 週 · 光照</span></a>
+        <a href="09-vertices-fragments.html"><span class="dir">下一課</span><span class="title">第 9 週 · 頂點到像素</span></a>
+      </nav>
+    </article>
+  </div>
+  <script src="../js/app.js"></script>
+  <script src="../js/blinn.js"></script>
+  <script>
+    RL.renderTopNav();
+    RL.bindToc();
+    RL.bindQuizzes();
+    RL.bindLessonProgress();
+  </script>
+</body>
+</html>

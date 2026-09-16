@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第 1 週 · 圖形系統與模型 — 電腦圖學互動教學</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-lesson="1">
+  <header class="topnav" id="topnav"></header>
+  <div class="wrap lesson-layout">
+    <aside class="toc">
+      <a href="#what">什麼是 CG</a>
+      <a href="#pipeline">圖形管線</a>
+      <a href="#models">場景 vs 影像</a>
+      <a href="#demo">管線演示</a>
+      <a href="#hist">硬體簡史</a>
+    </aside>
+    <article class="prose">
+      <div class="week-label">第 1 週 · 互動</div>
+      <h1>圖形系統與模型</h1>
+      <p>
+        電腦圖學把<strong>場景描述</strong>（相機、光源、幾何、材質）轉成<strong>像素</strong>。
+        一切現代 GPU 都圍繞可程式化管線運作。
+      </p>
+
+      <h2 id="what">你在做什麼</h2>
+      <ul>
+        <li>輸入：三角形網格、紋理、矩陣、著色器。</li>
+        <li>輸出：幀緩衝中的顏色（以及深度/模板）。</li>
+        <li>目標：正確、快速、好看。</li>
+      </ul>
+
+      <h2 id="pipeline">經典管線</h2>
+      <div class="formula">應用層 → 幾何（頂點著色器）→ 裁剪 / 光柵化 → 像素著色器 → 合併 / 顯示</div>
+      <ol>
+        <li><strong>應用層</strong>：更新場景圖、動畫、送出 draw call。</li>
+        <li><strong>頂點階段</strong>：模型視圖投影變換、法線變換、頂點屬性插值準備。</li>
+        <li><strong>圖元組裝 + 裁剪</strong>：形成三角形，對視錐裁剪。</li>
+        <li><strong>光柵化</strong>：決定覆蓋哪些像素，產生 fragment。</li>
+        <li><strong>像素階段</strong>：貼圖、光照、測試（深度/模板/alpha）。</li>
+        <li><strong>輸出合併</strong>：寫入幀緩衝，交換緩衝上屏。</li>
+      </ol>
+
+      <h2 id="models">兩種世界觀</h2>
+      <table class="cmp">
+        <thead><tr><th></th><th>場景 / 幾何</th><th>影像 / 像素</th></tr></thead>
+        <tbody>
+          <tr><td>表示</td><td>頂點、三角形、曲面</td><td>2D 陣列（幀緩衝）</td></tr>
+          <tr><td>縮放</td><td>解析、任意解析度</td><td>可能糊掉</td></tr>
+          <tr><td>成本</td><td>與複雜度相關</td><td>與解析度相關</td></tr>
+          <tr><td>例子</td><td>遊戲 3D 場景</td><td>後製、影像處理</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="demo">互動：管線階段</h2>
+      <p>點「下一步」逐步看資料如何流過管線。</p>
+      <div class="demo">
+        <div class="demo-head">
+          <h3><span class="badge">互動</span> 圖形管線走一遍</h3>
+          <div class="controls">
+            <button class="btn btn-primary btn-sm" id="pipe-next">下一階段</button>
+            <button class="btn btn-ghost btn-sm" id="pipe-reset">重置</button>
+          </div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="pipe-canvas" width="640" height="220"></canvas>
+        </div>
+        <div class="demo-stats">
+          <div class="stat"><span class="k">目前階段</span><span class="v" id="pipe-stage">0 · 幾何</span></div>
+          <div class="stat"><span class="k">說明</span><span class="v" id="pipe-desc" style="font-size:0.85rem">準備頂點資料</span></div>
+        </div>
+      </div>
+
+      <h2 id="hist">硬體簡史（一句話版）</h2>
+      <ul>
+        <li>軟體掃描轉換 → 固定功能 GPU → 可程式頂點/像素著色器 → 統一著色器 + 計算。</li>
+        <li>API：OpenGL / WebGL / Vulkan / Metal / Direct3D——概念相通。</li>
+      </ul>
+
+      <div class="quiz" data-answer="1" data-ok="正確——光柵化把連續幾何變成離散 fragment。" data-no="想想頂點與像素之間發生什麼。">
+        <h3>快速檢核</h3>
+        <div class="q">光柵化階段負責什麼？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt">更新場景圖動畫</button>
+          <button class="quiz-opt">把三角形轉成螢幕上的 fragment</button>
+          <button class="quiz-opt">載入紋理檔案</button>
+          <button class="quiz-opt">計算相機矩陣</button>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <nav class="lesson-nav">
+        <a href="../index.html"><span class="dir">← 首頁</span><span class="title">課綱</span></a>
+        <a href="02-programming.html"><span class="dir">下一課</span><span class="title">第 2 週 · 圖形程式</span></a>
+      </nav>
+    </article>
+  </div>
+  <script src="../js/app.js"></script>
+  <script src="../js/pipe-viz.js"></script>
+  <script>
+    RL.renderTopNav();
+    RL.bindToc();
+    RL.bindQuizzes();
+    RL.bindLessonProgress();
+  </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第 15 週 · 程序式貼圖 — 電腦圖學互動教學</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-lesson="15">
+  <header class="topnav" id="topnav"></header>
+  <div class="wrap lesson-layout">
+    <aside class="toc">
+      <a href="#idea">在 shader 裡算樣式</a>
+      <a href="#mix">混合與閾值</a>
+      <a href="#sdf">SDF 心智</a>
+      <a href="#pipeline">資產管線</a>
+      <a href="#checklist">檢查清單</a>
+    </aside>
+    <article class="prose">
+      <div class="week-label">第 15 週</div>
+      <h1>程序式方法（二）：程序式貼圖</h1>
+      <p>
+        不一定要載入 4K 貼圖。很多材質可用數學在 fragment shader 內即時算出，
+        解析度無限、記憶體省。
+      </p>
+
+      <h2 id="idea">常見手法</h2>
+      <ul>
+        <li>棋盤、條紋、磚牆（mod + 條件）。</li>
+        <li>雜訊顏色 / 粗糙度 / 法線擾動。</li>
+        <li>Triplanar mapping：避免 UV 接縫。</li>
+      </ul>
+
+      <h2 id="mix">混合與閾值</h2>
+      <div class="formula">mix(a, b, t) = a(1−t) + b·t &nbsp;&nbsp; smoothstep 避免硬邊鋸齒</div>
+      <p>地形材質權重常用高度 + 坡度 + 雜訊決策。</p>
+
+      <h2 id="sdf">SDF（有符號距離場）心智</h3>
+      <p>
+        每個空間點回報到表面的有號距離。可做：
+        反鋸齒邊、光線步進、軟陰影、字型渲染。
+      </p>
+
+      <h2 id="pipeline">何時仍用傳統貼圖</h2>
+      <table class="cmp">
+        <thead><tr><th></th><th>程序式</th><th>傳統貼圖</th></tr></thead>
+        <tbody>
+          <tr><td>風格統一、可參數化</td><td>照片寫實細節</td></tr>
+          <tr><td>省記憶體</td><td>美術可控</td></tr>
+          <tr><td>GPU 計算成本</td><td>取樣 + 快取友好</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="checklist">檢查清單</h2>
+      <div class="card">
+        <ul>
+          <li>是否與 UV scale / 世界座標一致？</li>
+          <li>遠處是否有走樣？要不要導數-based 過濾？</li>
+          <li>行動裝置 ALU 預算夠嗎？</li>
+        </ul>
+      </div>
+
+      <div class="quiz" data-answer="0" data-ok="正確——程序式在數學上生成樣式，可無限解析度。" data=no="不是壓縮格式問題。">
+        <h3>快速檢核</h3>
+        <div class="q">程序式貼圖的主要優點？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt">參數可控、解析度不受限、省記憶體</button>
+          <button class="quiz-opt">永遠比照片貼圖快</button>
+          <button class="quiz-opt">不需要光照模型</button>
+          <button class="quiz-opt">可避免所有走樣</button>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <nav class="lesson-nav">
+        <a href="14-procedural.html"><span class="dir">← 上一課</span><span class="title">第 14 週 · 雜訊</span></a>
+        <a href="17-curves.html"><span class="dir">下一課</span><span class="title">第 17 週 · 曲線曲面</span></a>
+      </nav>
+    </article>
+  </div>
+  <script src="../js/app.js"></script>
+  <script>
+    RL.renderTopNav();
+    RL.bindToc();
+    RL.bindQuizzes();
+    RL.bindLessonProgress();
+  </script>
+</body>
+</html>

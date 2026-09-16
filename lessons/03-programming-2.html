@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第 3 週 · 著色器與動畫 — 電腦圖學互動教學</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-lesson="3">
+  <header class="topnav" id="topnav"></header>
+  <div class="wrap lesson-layout">
+    <aside class="toc">
+      <a href="#shader">著色器角色</a>
+      <a href="#attrs">頂點屬性</a>
+      <a href="#loop">動畫迴圈</a>
+      <a href="#demo">Fragment 圖案玩具</a>
+      <a href="#uniform">Uniform 時間</a>
+    </aside>
+    <article class="prose">
+      <div class="week-label">第 3 週 · 互動</div>
+      <h1>圖形程式設計（二）：著色器與動畫</h1>
+      <p>
+        著色器是在 GPU 上跑的小程式。<strong>頂點著色器</strong>處理每個頂點；
+        <strong>像素/片段著色器</strong>處理每個 fragment。
+      </p>
+
+      <h2 id="shader">最小 GLSL</h2>
+<pre><code>// vertex
+attribute vec2 aPos;
+void main() { gl_Position = vec4(aPos, 0.0, 1.0); }
+
+// fragment
+precision mediump float;
+uniform float uTime;
+void main() {
+  vec2 uv = gl_FragCoord.xy / 300.0;
+  gl_FragColor = vec4(uv, 0.5 + 0.5 * sin(uTime), 1.0);
+}</code></pre>
+
+      <h2 id="attrs">頂點屬性 vs Uniform</h2>
+      <table class="cmp">
+        <thead><tr><th></th><th>Attribute</th><th>Uniform</th></tr></thead>
+        <tbody>
+          <tr><td>頻率</td><td>每個頂點</td><td>每次 draw 一次</td></tr>
+          <tr><td>例子</td><td>位置、法線、UV、顏色</td><td>矩陣、時間、光源位置</td></tr>
+          <tr><td>插值</td><td>可自動插值到 fragment</td><td>常數</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="loop">動畫迴圈</h2>
+      <div class="formula">requestAnimationFrame → 更新時間/姿態 → 清屏 → draw → 重複</div>
+      <ul>
+        <li>用 <code>performance.now()</code> 做 dt，避免幀率綁定。</li>
+        <li>分離「模擬」與「渲染」。</li>
+      </ul>
+
+      <h2 id="demo">互動：程序式 fragment 圖案</h2>
+      <div class="demo">
+        <div class="demo-head">
+          <h3><span class="badge">互動</span> 像素著色器玩具（Canvas 模擬）</h3>
+          <div class="controls">
+            <label>頻率 <input type="range" id="sh-freq" min="1" max="12" step="0.5" value="4" /> <span id="sh-freq-v">4</span></label>
+            <label>速度 <input type="range" id="sh-speed" min="0" max="3" step="0.1" value="1" /> <span id="sh-speed-v">1.0</span></label>
+            <button class="btn btn-primary btn-sm" id="sh-play">播放 / 暫停</button>
+          </div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="sh-canvas" width="400" height="280"></canvas>
+        </div>
+      </div>
+
+      <h2 id="uniform">為何時間要用 uniform</h2>
+      <p>
+        每個 fragment 都要看到同一個「現在幾點」，所以時間是 uniform；
+        位置則因頂點而異，是 attribute。
+      </p>
+
+      <div class="quiz" data-answer="1" data-ok="對——uniform 對整次 draw 常數，attribute 每頂點。" data=no="想想誰每個頂點變、誰整批不變。">
+        <h3>快速檢核</h3>
+        <div class="q">光源位置通常傳成？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt">Attribute（每頂點）</button>
+          <button class="quiz-opt">Uniform（整次 draw）</button>
+          <button class="quiz-opt">Varying（由頂點插值）</button>
+          <button class="quiz-opt">只寫在硬體暫存器</button>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <nav class="lesson-nav">
+        <a href="02-programming.html"><span class="dir">← 上一課</span><span class="title">第 2 週 · 程式入門</span></a>
+        <a href="04-transforms.html"><span class="dir">下一課</span><span class="title">第 4 週 · 變換</span></a>
+      </nav>
+    </article>
+  </div>
+  <script src="../js/app.js"></script>
+  <script src="../js/shader-toy.js"></script>
+  <script>
+    RL.renderTopNav();
+    RL.bindToc();
+    RL.bindQuizzes();
+    RL.bindLessonProgress();
+  </script>
+</body>
+</html>

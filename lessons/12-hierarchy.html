@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第 12 週 · 建模與階層 — 電腦圖學互動教學</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-lesson="12">
+  <header class="topnav" id="topnav"></header>
+  <div class="wrap lesson-layout">
+    <aside class="toc">
+      <a href="#graph">場景圖</a>
+      <a href="#local">局部座標</a>
+      <a href="#matrix">矩陣堆疊</a>
+      <a href="#demo">機械臂演示</a>
+      <a href="#tips">設計建議</a>
+    </aside>
+    <article class="prose">
+      <div class="week-label">第 12 週 · 互動</div>
+      <h1>建模與階層（一）</h1>
+      <p>
+        複雜物體是「零件的樹」。父節點的變換會傳給子節點——
+        這是關節、載具、角色骨架的核心。
+      </p>
+
+      <h2 id="graph">場景圖</h2>
+      <ul>
+        <li>節點：局部變換 + 幾何 / 子節點。</li>
+        <li>世界矩陣 = 父世界矩陣 × 局部矩陣。</li>
+        <li>遍歷時維持「目前累積矩陣」。</li>
+      </ul>
+      <div class="formula">M<sub>world</sub><sup>child</sup> = M<sub>world</sub><sup>parent</sup> · M<sub>local</sub><sup>child</sup></div>
+
+      <h2 id="local">為何用局部座標</h2>
+      <p>
+        手肘相對手臂移動，比在世界座標裡重算所有頂點容易得多。
+        動畫關鍵幀也通常存在局部空間。
+      </p>
+
+      <h2 id="matrix">矩陣堆疊（古典 OpenGL 心智）</h2>
+      <pre><code>push(); translate(軀幹);
+  drawTorso();
+  push(); translate(肩); rotate(手臂角);
+    drawArm();
+    push(); translate(肘); rotate(前臂角);
+      drawForearm();
+    pop();
+  pop();
+pop();</code></pre>
+
+      <h2 id="demo">互動：二連桿機械臂</h2>
+      <div class="demo">
+        <div class="demo-head">
+          <h3><span class="badge">互動</span> 階層關節</h3>
+          <div class="controls">
+            <label>肩角 <input type="range" id="hg-a1" min="-120" max="120" step="1" value="35" /> <span id="hg-a1-v">35</span>°</label>
+            <label>肘角 <input type="range" id="hg-a2" min="-140" max="140" step="1" value="-50" /> <span id="hg-a2-v">-50</span>°</label>
+            <button class="btn btn-primary btn-sm" id="hg-anim">播放動畫</button>
+          </div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="hg-canvas" width="480" height="320"></canvas>
+        </div>
+      </div>
+
+      <h2 id="tips">設計建議</h2>
+      <ul>
+        <li>分開「場景圖更新」與「渲染」。</li>
+        <li>材質 / 網格可共享，變換不共享。</li>
+        <li>骨骼動畫 = 骨骼矩陣調色盤 + 頂點權重。</li>
+      </ul>
+
+      <div class="quiz" data-answer="1" data-ok="正確——子世界矩陣 = 父世界 × 子局部。" data=no="想想矩陣如何沿樹往下乘。">
+        <h3>快速檢核</h3>
+        <div class="q">子節點世界矩陣是？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt">只用自己的局部矩陣</button>
+          <button class="quiz-opt">父世界矩陣 × 子局部矩陣</button>
+          <button class="quiz-opt">父局部 × 相機反矩陣</button>
+          <button class="quiz-opt">單位矩陣</button>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <nav class="lesson-nav">
+        <a href="11-discrete-2.html"><span class="dir">← 上一課</span><span class="title">第 11 週 · 深度混合</span></a>
+        <a href="13-hierarchy-2.html"><span class="dir">下一課</span><span class="title">第 13 週 · 姿態動畫</span></a>
+      </nav>
+    </article>
+  </div>
+  <script src="../js/app.js"></script>
+  <script src="../js/hierarchy.js"></script>
+  <script>
+    RL.renderTopNav();
+    RL.bindToc();
+    RL.bindQuizzes();
+    RL.bindLessonProgress();
+  </script>
+</body>
+</html>

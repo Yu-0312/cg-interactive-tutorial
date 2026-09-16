@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第 4 週 · 幾何與變換 — 電腦圖學互動教學</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-lesson="4">
+  <header class="topnav" id="topnav"></header>
+  <div class="wrap lesson-layout">
+    <aside class="toc">
+      <a href="#homog">齊次座標</a>
+      <a href="#srt">縮放 · 旋轉 · 平移</a>
+      <a href="#order">順序很重要</a>
+      <a href="#demo">2D 變換實驗室</a>
+      <a href="#3d">3D 旋轉</a>
+    </aside>
+    <article class="prose">
+      <div class="week-label">第 4 週 · 互動</div>
+      <h1>幾何物件與變換</h1>
+      <p>
+        頂點被矩陣變換。學會以正確順序<strong>組合</strong> SRT 矩陣，
+        是早期圖學最高槓桿的技能。
+      </p>
+
+      <h2 id="homog">齊次座標</h2>
+      <p>點 $(x,y,z)$ 寫成 $(x,y,z,1)$。平移也能用矩陣乘法：</p>
+      <div class="formula">[x' y' z' w']ᵀ = M · [x y z 1]ᵀ</div>
+      <ul>
+        <li>位置 $w=1$，方向 $w=0$（忽略平移）。</li>
+        <li>投影後除以 $w$（透視除法）。</li>
+      </ul>
+
+      <h2 id="srt">核心矩陣（行向量約定依 API 而異）</h2>
+      <div class="formula">T = translate · R = rotate · S = scale</div>
+      <p>常見物體變換：<strong>M = T · R · S</strong>（先在局部縮放，再旋轉，再移動）。</p>
+
+      <h2 id="order">順序很重要</h2>
+      <div class="callout warn">
+        矩陣乘法<strong>不可交換</strong>。<code>T*R</code> ≠ <code>R*T</code>：
+        一個是繞原點旋轉再平移；另一個是平移後再繞原點旋轉。
+      </div>
+
+      <h2 id="demo">互動：2D SRT 實驗室</h2>
+      <div class="demo">
+        <div class="demo-head">
+          <h3><span class="badge">互動</span> 變換組合</h3>
+          <div class="controls">
+            <label>tx <input type="range" id="tf-tx" min="-80" max="80" step="1" value="40" /> <span id="tf-tx-v">40</span></label>
+            <label>ty <input type="range" id="tf-ty" min="-80" max="80" step="1" value="10" /> <span id="tf-ty-v">10</span></label>
+            <label>旋轉° <input type="range" id="tf-rot" min="0" max="360" step="1" value="30" /> <span id="tf-rot-v">30</span></label>
+            <label>縮放 <input type="range" id="tf-s" min="0.4" max="1.8" step="0.05" value="1" /> <span id="tf-s-v">1.00</span></label>
+            <label>順序
+              <select id="tf-order">
+                <option value="trs">T·R·S</option>
+                <option value="rts">R·T·S</option>
+                <option value="str">S·T·R</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="tf-canvas" width="560" height="360"></canvas>
+        </div>
+        <div class="demo-stats">
+          <div class="stat"><span class="k">目前順序</span><span class="v" id="tf-ord">T·R·S</span></div>
+          <div class="stat"><span class="k">提示</span><span class="v" style="font-size:0.8rem">換順序看方塊怎麼跑</span></div>
+        </div>
+      </div>
+
+      <h2 id="3d">3D 旋轉要點</h2>
+      <ul>
+        <li>繞軸旋轉：X / Y / Z 軸矩陣；任意軸用羅德里格斯或四元數。</li>
+        <li>歐拉角有萬向鎖；動畫常用四元數球面線性插值（slerp）。</li>
+      </ul>
+
+      <div class="quiz" data-answer="1" data-ok="正確——M = T·R·S 是常見物體變換。" data=no="先縮放局部，再旋轉，再搬到世界位置。">
+        <h3>快速檢核</h3>
+        <div class="q">常見的物體變換組合是？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt">S·T·R</button>
+          <button class="quiz-opt">T·R·S</button>
+          <button class="quiz-opt">R·S·T</button>
+          <button class="quiz-opt">只能單獨套用一個矩陣</button>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <nav class="lesson-nav">
+        <a href="03-programming-2.html"><span class="dir">← 上一課</span><span class="title">第 3 週 · 著色器</span></a>
+        <a href="05-viewing.html"><span class="dir">下一課</span><span class="title">第 5 週 · 檢視</span></a>
+      </nav>
+    </article>
+  </div>
+  <script src="../js/app.js"></script>
+  <script src="../js/transform-lab.js"></script>
+  <script>
+    RL.renderTopNav();
+    RL.bindToc();
+    RL.bindQuizzes();
+    RL.bindLessonProgress();
+  </script>
+</body>
+</html>

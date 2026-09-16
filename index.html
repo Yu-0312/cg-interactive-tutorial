@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>電腦圖學互動教學</title>
+  <meta name="description" content="互動式電腦圖學課程：管線、變換、檢視、光照、光柵化、階層建模、程序式方法與曲線曲面。" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-lesson="0">
+  <header class="topnav" id="topnav"></header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-kicker">互動教學 · 共 18 週</div>
+      <h1>把電腦圖學，做成可以動手拖的課</h1>
+      <p class="lede">
+        完整對應一學期 CG 課綱：系統與模型、圖形程式、幾何變換、檢視、光照、
+        頂點到像素、離散技術、階層建模、程序式方法與曲線曲面——附可調參數的即時演示。
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="lessons/01-systems.html">開始第 1 週</a>
+        <a class="btn btn-ghost" href="#syllabus">瀏覽課綱</a>
+        <a class="btn btn-ghost" href="lessons/04-transforms.html">試試變換實驗室</a>
+      </div>
+    </section>
+
+    <section class="section" id="progress">
+      <div class="section-head">
+        <div>
+          <h2>你的進度</h2>
+          <p>存在本機瀏覽器。</p>
+        </div>
+        <div style="min-width:220px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;font-size:0.85rem;color:var(--ink-muted)">
+            <span>課程完成度</span>
+            <strong id="overall-progress">0%</strong>
+          </div>
+          <div class="progress-bar"><span id="overall-bar" style="width:0%"></span></div>
+        </div>
+      </div>
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>基礎</h3>
+          <p>系統、程式模型、幾何物件、變換、檢視。</p>
+          <div class="meta"><span class="pill">第 1–5 週</span></div>
+        </div>
+        <div class="card">
+          <h3>著色與光柵化</h3>
+          <p>光照模型、頂點→像素、離散技術、貼圖。</p>
+          <div class="meta"><span class="pill">第 6–11 週</span></div>
+        </div>
+        <div class="card">
+          <h3>建模與進階</h3>
+          <p>階層結構、程序式方法、曲線與曲面。</p>
+          <div class="meta"><span class="pill">第 12–17 週</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="path">
+      <div class="section-head">
+        <div>
+          <h2>建議學習路徑</h2>
+          <p>沿管線由上而下，再進入建模工具。</p>
+        </div>
+      </div>
+      <div class="card">
+        <ol>
+          <li><strong>看懂管線</strong>：應用層 → 幾何 → 光柵化 → 像素 → 顯示。</li>
+          <li><strong>先寫小程式</strong>：清屏 / 用 WebGL 或 2D canvas 畫一個三角形。</li>
+          <li><strong>掌握變換</strong>：縮放、旋轉、平移；模型 / 檢視 / 投影矩陣。</li>
+          <li><strong>理解檢視</strong>：相機、透視 vs 正交、視錐體。</li>
+          <li><strong>照亮表面</strong>：法線、環境/漫反射/高光、Blinn-Phong。</li>
+          <li><strong>光柵化</strong>：掃描轉換、插值、深度測試、混合。</li>
+          <li><strong>組裝場景</strong>：場景圖、階層姿態、程序式形狀、曲線。</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="syllabus">
+      <div class="section-head">
+        <div>
+          <h2>完整課綱</h2>
+          <p>18 週 · 含期中/期末考 · 標示「互動」者有即時演示。</p>
+        </div>
+      </div>
+      <div class="weeks" id="week-list"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div><h2>怎麼使用這份教材</h2></div></div>
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>每個滑桿都拖一拖</h3>
+          <p>移動光源、改 FOV、編輯矩陣與控制點。圖學直覺是視覺的——別跳過演示。</p>
+        </div>
+        <div class="card">
+          <h3>搭配寫程式</h3>
+          <p>看完演示後，用 WebGL、three.js 或 Canvas 2D 重寫同一概念。從旋轉彩色三角形開始。</p>
+        </div>
+        <div class="card">
+          <h3>手畫管線圖</h3>
+          <p>每週默畫一次圖形管線與 model-view-projection 鏈。</p>
+        </div>
+        <div class="card">
+          <h3>考試週</h3>
+          <p>第 8 與 16/18 週是期中/期末——用這裡的小測驗暖身，再手推變換矩陣。</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="inner">
+      <div>電腦圖學互動教學 · 開放學習教材</div>
+      <div>自學與課堂皆可使用</div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    const WEEKS = [
+      { n: 1, title: "圖形系統與模型", topics: ["顯示管線", "影像 vs 幾何"], lesson: "01-systems.html", kind: "interactive" },
+      { n: 2, title: "圖形程式設計", topics: ["Canvas / WebGL 入門", "第一個三角形"], lesson: "02-programming.html", kind: "interactive" },
+      { n: 3, title: "圖形程式設計", topics: ["著色器與緩衝", "動畫迴圈"], lesson: "03-programming-2.html", kind: "interactive" },
+      { n: 4, title: "幾何物件與變換", topics: ["向量與矩陣", "SRT 變換"], lesson: "04-transforms.html", kind: "interactive" },
+      { n: 5, title: "檢視（Viewing）", topics: ["相機", "投影與視錐"], lesson: "05-viewing.html", kind: "interactive" },
+      { n: 6, title: "光照與著色", topics: ["法線", "Phong 模型"], lesson: "06-lighting.html", kind: "interactive" },
+      { n: 7, title: "光照與著色", topics: ["Blinn-Phong", "Gouraud vs Phong"], lesson: "07-shading.html", kind: "interactive" },
+      { n: 8, title: "期中考", topics: [], kind: "exam" },
+      { n: 9, title: "從頂點到像素", topics: ["光柵化", "插值"], lesson: "09-vertices-fragments.html", kind: "interactive" },
+      { n: 10, title: "離散技術", topics: ["貼圖", "取樣"], lesson: "10-discrete.html", kind: "interactive" },
+      { n: 11, title: "離散技術", topics: ["深度、混合、模板"], lesson: "11-discrete-2.html", kind: "lesson" },
+      { n: 12, title: "建模與階層", topics: ["場景圖", "局部座標"], lesson: "12-hierarchy.html", kind: "interactive" },
+      { n: 13, title: "建模與階層", topics: ["姿態與動畫"], lesson: "13-hierarchy-2.html", kind: "lesson" },
+      { n: 14, title: "程序式方法", topics: ["隨機與雜訊", "L-system"], lesson: "14-procedural.html", kind: "interactive" },
+      { n: 15, title: "程序式方法", topics: ["程序式貼圖"], lesson: "15-procedural-2.html", kind: "lesson" },
+      { n: 16, title: "期末考", topics: [], kind: "exam" },
+      { n: 17, title: "曲線與曲面", topics: ["Bézier 與 B-spline", "曲面"], lesson: "17-curves.html", kind: "interactive" },
+      { n: 18, title: "期末考", topics: [], kind: "exam" },
+    ];
+
+    RL.renderTopNav("home");
+    RL.showWeekProgress();
+    RL.bindQuizzes();
+
+    const list = document.getElementById("week-list");
+    list.innerHTML = WEEKS.map((w) => {
+      const pct = RL.getLessonProgress(w.n);
+      const href = w.lesson ? `lessons/${w.lesson}` : null;
+      const tag =
+        w.kind === "interactive" ? '<span class="pill green">互動</span>' :
+        w.kind === "exam" ? '<span class="pill gold">考試</span>' :
+        '<span class="pill">課程</span>';
+      const bar = pct > 0 ? `<div class="progress-bar" style="margin-top:0.65rem"><span style="width:${pct}%"></span></div>` : "";
+      const topics = w.topics.length ? `<p class="topics">${w.topics.join(" · ")}</p>` : '<p class="topics">評量週</p>';
+      const inner = `
+        <div class="week-num">${String(w.n).padStart(2, "0")}</div>
+        <div>
+          <h3>${w.title}</h3>
+          ${topics}
+          <div class="meta">${tag}${pct ? `<span class="pill dim">${pct}%</span>` : ""}</div>
+          ${bar}
+        </div>
+        <div class="go" style="color:var(--ink-dim);font-size:0.9rem;align-self:center">${href ? "開啟 →" : "—"}</div>`;
+      if (href) return `<a class="week-row ${w.kind === "exam" ? "project" : ""}" href="${href}">${inner}</a>`;
+      return `<div class="week-row project">${inner}</div>`;
+    }).join("");
+  </script>
+</body>
+</html>

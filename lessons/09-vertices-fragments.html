@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第 9 週 · 從頂點到像素 — 電腦圖學互動教學</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-lesson="9">
+  <header class="topnav" id="topnav"></header>
+  <div class="wrap lesson-layout">
+    <aside class="toc">
+      <a href="#raster">光柵化</a>
+      <a href="#edge">邊函數</a>
+      <a href="#interp">屬性插值</a>
+      <a href="#demo">掃描轉換演示</a>
+      <a href="#depth">深度緩衝</a>
+    </aside>
+    <article class="prose">
+      <div class="week-label">第 9 週 · 互動</div>
+      <h1>從頂點到像素</h1>
+      <p>
+        光柵化把投影後的三角形變成螢幕上的 fragment。核心問題：
+        <strong>哪些像素被覆蓋？屬性如何插值？</strong>
+      </p>
+
+      <h2 id="raster">掃描轉換</h2>
+      <ol>
+        <li>三角形頂點轉到螢幕座標（整數或定點）。</li>
+        <li>對每個像素中心做覆蓋測試。</li>
+        <li>通過測試 → 產生 fragment，送入像素著色器。</li>
+      </ol>
+
+      <h2 id="edge">邊函數（edge function）</h2>
+      <p>
+        對三角形每條邊 $E(x,y)$，像素在內側若三邊同號。
+        這也是 GPU 硬體加速的基礎（可平行、可增量）。
+      </p>
+      <div class="formula">E(x,y) = (x−x₀)(y₁−y₀) − (y−y₀)(x₁−x₀)</div>
+
+      <h2 id="interp">透視正確插值</h2>
+      <p>
+        直接在螢幕空間線性插值 UV 會錯。要在
+        <strong>1/w 空間</strong>插值，再還原（透視正確插值）。
+      </p>
+
+      <h2 id="demo">互動：光柵化覆蓋</h2>
+      <div class="demo">
+        <div class="demo-head">
+          <h3><span class="badge">互動</span> 三角形覆蓋與重心</h3>
+          <div class="controls">
+            <label>解析度 <input type="range" id="ra-res" min="8" max="48" step="2" value="24" /> <span id="ra-res-v">24</span></label>
+            <label><input type="checkbox" id="ra-bary" checked /> 顯示重心座標色</label>
+          </div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="ra-canvas" width="480" height="320"></canvas>
+        </div>
+        <div class="demo-stats">
+          <div class="stat"><span class="k">覆蓋像素</span><span class="v" id="ra-count">—</span></div>
+        </div>
+      </div>
+
+      <h2 id="depth">深度緩衝（Z-buffer）</h2>
+      <ul>
+        <li>每個像素存最小深度（或最大，依 API）。</li>
+        <li>通過深度測試才寫入顏色。</li>
+        <li>透明物體通常關深度寫入、用 alpha 混合。</li>
+      </ul>
+
+      <div class="quiz" data-answer="2" data-ok="正確——UV 等要在 1/w 空間插值才是透視正確。" data=no="螢幕空間直接線性插值會扭曲貼圖。">
+        <h3>快速檢核</h3>
+        <div class="q">透視正確的屬性插值需要？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt">只在頂點算一次，不插值</button>
+          <button class="quiz-opt">螢幕座標直接 lerp UV</button>
+          <button class="quiz-opt">對 1/w 插值後還原</button>
+          <button class="quiz-opt">把深度設成常數</button>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <nav class="lesson-nav">
+        <a href="07-shading.html"><span class="dir">← 上一課</span><span class="title">第 7 週 · 著色</span></a>
+        <a href="10-discrete.html"><span class="dir">下一課</span><span class="title">第 10 週 · 離散技術</span></a>
+      </nav>
+    </article>
+  </div>
+  <script src="../js/app.js"></script>
+  <script src="../js/raster.js"></script>
+  <script>
+    RL.renderTopNav();
+    RL.bindToc();
+    RL.bindQuizzes();
+    RL.bindLessonProgress();
+  </script>
+</body>
+</html>

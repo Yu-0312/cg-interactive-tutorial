@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第 10 週 · 離散技術：貼圖 — 電腦圖學互動教學</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-lesson="10">
+  <header class="topnav" id="topnav"></header>
+  <div class="wrap lesson-layout">
+    <aside class="toc">
+      <a href="#uv">UV 座標</a>
+      <a href="#filter">取樣與過濾</a>
+      <a href="#mip">Mipmap</a>
+      <a href="#demo">取樣玩具</a>
+      <a href="#wrap">尋址模式</a>
+    </aside>
+    <article class="prose">
+      <div class="week-label">第 10 週 · 互動</div>
+      <h1>離散技術（一）：貼圖與取樣</h1>
+      <p>
+        貼圖把影像細節映到幾何上。關鍵不在「貼上去」，而在
+        <strong>如何在離散像素間取樣</strong>。
+      </p>
+
+      <h2 id="uv">UV 座標</h2>
+      <ul>
+        <li>每個頂點一組 (u,v)，通常 ∈ [0,1]。</li>
+        <li>插值得到 fragment 的 UV，再去貼圖取色。</li>
+        <li>多組 UV：albedo、normal map、AO…</li>
+      </ul>
+
+      <h2 id="filter">過濾</h2>
+      <table class="cmp">
+        <thead><tr><th>模式</th><th>效果</th><th>成本</th></tr></thead>
+        <tbody>
+          <tr><td>最近鄰</td><td>銳利、像素風、易閃爍</td><td>最低</td></tr>
+          <tr><td>雙線性</td><td>平滑 2×2</td><td>中</td></tr>
+          <tr><td>三線性</td><td>雙線性 + mipmap 層間插值</td><td>較高</td></tr>
+          <tr><td>各向異性</td><td>斜視更清晰</td><td>高</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="mip">Mipmap</h2>
+      <p>
+        預先做 1/2, 1/4… 解析度金字塔。遠處像素一次取較小層，
+        減少走樣與快取未命中。過度模糊可用各向異性過濾補救。
+      </p>
+
+      <h2 id="demo">互動：取樣模式</h2>
+      <div class="demo">
+        <div class="demo-head">
+          <h3><span class="badge">互動</span> 貼圖取樣</h3>
+          <div class="controls">
+            <label>模式
+              <select id="tex-mode">
+                <option value="nn">最近鄰</option>
+                <option value="bl" selected>雙線性</option>
+              </select>
+            </label>
+            <label>縮放 <input type="range" id="tex-zoom" min="1" max="12" step="0.5" value="6" /> <span id="tex-zoom-v">6</span></label>
+          </div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="tex-canvas" width="420" height="300"></canvas>
+        </div>
+      </div>
+
+      <h2 id="wrap">尋址模式</h2>
+      <ul>
+        <li><strong>Clamp</strong>：夾到邊緣顏色。</li>
+        <li><strong>Repeat</strong>：平鋪。</li>
+        <li><strong>Mirror</strong>：鏡像平鋪。</li>
+      </ul>
+
+      <div class="quiz" data-answer="1" data-ok="正確——mipmap 用多層解析度減少遠處走樣與閃爍。" data=no="想想距離變遠時貼圖像素比螢幕像素還大。">
+        <h3>快速檢核</h3>
+        <div class="q">Mipmap 主要解決什麼？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt">法線不連續</button>
+          <button class="quiz-opt">遠處貼圖走樣 / 閃爍</button>
+          <button class="quiz-opt">深度衝突</button>
+          <button class="quiz-opt">頂點數量過多</button>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <nav class="lesson-nav">
+        <a href="09-vertices-fragments.html"><span class="dir">← 上一課</span><span class="title">第 9 週 · 光柵化</span></a>
+        <a href="11-discrete-2.html"><span class="dir">下一課</span><span class="title">第 11 週 · 深度與混合</span></a>
+      </nav>
+    </article>
+  </div>
+  <script src="../js/app.js"></script>
+  <script src="../js/tex-sample.js"></script>
+  <script>
+    RL.renderTopNav();
+    RL.bindToc();
+    RL.bindQuizzes();
+    RL.bindLessonProgress();
+  </script>
+</body>
+</html>

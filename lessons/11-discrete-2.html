@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第 11 週 · 深度、混合、模板 — 電腦圖學互動教學</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-lesson="11">
+  <header class="topnav" id="topnav"></header>
+  <div class="wrap lesson-layout">
+    <aside class="toc">
+      <a href="#depth">深度測試</a>
+      <a href="#blend">Alpha 混合</a>
+      <a href="#stencil">模板緩衝</a>
+      <a href="#order">繪製順序</a>
+      <a href="#checklist">實作清單</a>
+    </aside>
+    <article class="prose">
+      <div class="week-label">第 11 週</div>
+      <h1>離散技術（二）：深度、混合、模板</h1>
+      <p>
+        顏色不是唯一輸出。深度決定可見性，混合處理透明，模板做遮罩與特效。
+      </p>
+
+      <h2 id="depth">深度測試</h2>
+      <ul>
+        <li>Z-buffer：每像素存深度，測試通過才寫。</li>
+        <li>常見比較：LESS（近的蓋住遠的）。</li>
+        <li>精度：非線性深度 → 近處精度高，遠處易 z-fighting。</li>
+      </ul>
+      <div class="callout warn">
+        <strong>Z-fighting。</strong> 共面或極近表面會閃爍。解法：polygon offset、提高精度、避免共面幾何。
+      </div>
+
+      <h2 id="blend">Alpha 混合</h2>
+      <div class="formula">C = α·C<sub>src</sub> + (1−α)·C<sub>dst</sub></div>
+      <ul>
+        <li>通常關閉深度寫入，但仍可深度測試。</li>
+        <li>由遠到近繪製透明物；或 OIT（加權混合等）。</li>
+        <li>Premultiplied alpha 在合成時更穩。</li>
+      </ul>
+
+      <h2 id="stencil">模板緩衝</h2>
+      <p>每像素整數，可做：</p>
+      <ul>
+        <li>鏡子反射遮罩</li>
+        <li>描邊 / 輪廓</li>
+        <li>門戶 / 窗戶裁剪</li>
+      </ul>
+
+      <h2 id="order">典型繪製順序</h2>
+      <ol>
+        <li>不透明（前到後可優化 early-Z）</li>
+        <li>天空盒 / 背景</li>
+        <li>透明（後到前）</li>
+        <li>UI / 後製</li>
+      </ol>
+
+      <h2 id="checklist">檢查清單</h2>
+      <div class="card">
+        <ul>
+          <li>深度開啟？寫入策略？</li>
+          <li>混合函數是否符合貼圖是否 premultiplied？</li>
+          <li>模板 ref / mask / op 是否一致？</li>
+        </ul>
+      </div>
+
+      <div class="quiz" data-answer="0" data-ok="正確——深度精度非線性，遠處容易 z-fighting。" data=no="回想深度變換後的分佈。">
+        <h3>快速檢核</h3>
+        <div class="q">Z-fighting 最常因？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt">共面/極近表面 + 深度精度不足</button>
+          <button class="quiz-opt">法線沒有正規化</button>
+          <button class="quiz-opt">貼圖沒有 mipmap</button>
+          <button class="quiz-opt">FOV 太大</button>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <nav class="lesson-nav">
+        <a href="10-discrete.html"><span class="dir">← 上一課</span><span class="title">第 10 週 · 貼圖</span></a>
+        <a href="12-hierarchy.html"><span class="dir">下一課</span><span class="title">第 12 週 · 階層建模</span></a>
+      </nav>
+    </article>
+  </div>
+  <script src="../js/app.js"></script>
+  <script>
+    RL.renderTopNav();
+    RL.bindToc();
+    RL.bindQuizzes();
+    RL.bindLessonProgress();
+  </script>
+</body>
+</html>

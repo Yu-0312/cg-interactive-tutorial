@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>第 2 週 · 圖形程式設計 — 電腦圖學互動教學</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-lesson="2">
+  <header class="topnav" id="topnav"></header>
+  <div class="wrap lesson-layout">
+    <aside class="toc">
+      <a href="#canvas">Canvas 2D</a>
+      <a href="#webgl">WebGL 心智模型</a>
+      <a href="#tri">第一個三角形</a>
+      <a href="#demo">三角形實驗室</a>
+      <a href="#practice">動手練習</a>
+    </aside>
+    <article class="prose">
+      <div class="week-label">第 2 週 · 互動</div>
+      <h1>圖形程式設計（一）</h1>
+      <p>
+        先用最簡單的 API 畫出東西。Canvas 2D 適合理解座標與像素；
+        WebGL 適合理解緩衝與著色器。
+      </p>
+
+      <h2 id="canvas">Canvas 2D 最小範例</h2>
+<pre><code>const c = document.getElementById("c");
+const ctx = c.getContext("2d");
+ctx.fillStyle = "#5b8cff";
+ctx.beginPath();
+ctx.moveTo(100, 50);
+ctx.lineTo(50, 150);
+ctx.lineTo(150, 150);
+ctx.closePath();
+ctx.fill();</code></pre>
+
+      <h2 id="webgl">WebGL 心智模型</h2>
+      <ol>
+        <li>建立 context 與著色器程式（頂點 + 像素）。</li>
+        <li>上傳頂點資料到 buffer，綁定 attribute。</li>
+        <li>設定 uniform（矩陣、顏色）。</li>
+        <li><code>drawArrays</code> / <code>drawElements</code>。</li>
+      </ol>
+      <div class="callout tip">
+        <strong>座標系。</strong> WebGL NDC：x,y ∈ [−1,1]，原點在中心。Canvas 2D：原點在左上，y 向下。
+      </div>
+
+      <h2 id="tri">為什麼從三角形開始</h2>
+      <ul>
+        <li>任何曲面最終都三角化。</li>
+        <li>平面內的仿射性質讓插值簡單。</li>
+        <li>GPU 原生吃三角形。</li>
+      </ul>
+
+      <h2 id="demo">互動：拖曳三角形</h2>
+      <div class="demo">
+        <div class="demo-head">
+          <h3><span class="badge">互動</span> 三角形頂點編輯</h3>
+          <div class="controls">
+            <label><input type="checkbox" id="tri-grid" checked /> 顯示網格</label>
+            <button class="btn btn-ghost btn-sm" id="tri-reset">重置頂點</button>
+          </div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="tri-canvas" width="520" height="360"></canvas>
+        </div>
+        <div class="demo-stats">
+          <div class="stat"><span class="k">面積</span><span class="v" id="tri-area">—</span></div>
+          <div class="stat"><span class="k">提示</span><span class="v" style="font-size:0.8rem">拖曳圓點移動頂點</span></div>
+        </div>
+      </div>
+
+      <h2 id="practice">動手練習</h2>
+      <ol>
+        <li>把三角形改成用 <code>gl.TRIANGLES</code> 的三個頂點 RGB 插值。</li>
+        <li>加上 <code>requestAnimationFrame</code> 讓它旋轉。</li>
+        <li>記錄：viewport、clear color、座標翻轉為什麼需要。</li>
+      </ol>
+
+      <div class="quiz" data-answer="0" data-ok="正確——NDC 原點在中心，範圍 [−1,1]。" data-no="Canvas 2D 原點才是左上。">
+        <h3>快速檢核</h3>
+        <div class="q">WebGL 標準化裝置座標（NDC）的原點在哪？</div>
+        <div class="quiz-options">
+          <button class="quiz-opt">畫面中心</button>
+          <button class="quiz-opt">左上角</button>
+          <button class="quiz-opt">右下角</button>
+          <button class="quiz-opt">任意位置，由 viewport 決定</button>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <nav class="lesson-nav">
+        <a href="01-systems.html"><span class="dir">← 上一課</span><span class="title">第 1 週 · 系統</span></a>
+        <a href="03-programming-2.html"><span class="dir">下一課</span><span class="title">第 3 週 · 著色器</span></a>
+      </nav>
+    </article>
+  </div>
+  <script src="../js/app.js"></script>
+  <script src="../js/tri-lab.js"></script>
+  <script>
+    RL.renderTopNav();
+    RL.bindToc();
+    RL.bindQuizzes();
+    RL.bindLessonProgress();
+  </script>
+</body>
+</html>
