@@ -1,16 +1,22 @@
 # 電腦圖學互動教學
 
-一份可互動、可動手拖的電腦圖學（Computer Graphics）課程教材，對應完整 18 週課綱：
-圖形系統與管線、圖形程式、幾何變換、檢視、光照著色、光柵化、貼圖與深度混合、
-階層建模、程序式方法、曲線與曲面。
+一份可互動、可動手拖的電腦圖學（Computer Graphics）課程教材，對應完整 18 週課綱：圖形系統與管線、圖形程式、幾何變換、檢視、光照著色、光柵化、貼圖與深度混合、階層建模、程序式方法、曲線與曲面。
 
-**在本機開啟：**
+[![Lessons](https://img.shields.io/badge/lessons-18%20weeks-38BDF8)](lessons/)
+[![Stack](https://img.shields.io/badge/HTML%20·%20CSS%20·%20JS-零建置-4ADE80)]()
+[![License](https://img.shields.io/badge/License-free%20for%20learning-A78BFA)]()
 
 ```bash
 cd cg-interactive-tutorial
 python3 -m http.server 8080
 # 瀏覽器開啟 http://localhost:8080
 ```
+
+<p align="center">
+  <img src="assets/course-map.svg" alt="電腦圖學互動教學課程地圖：18 週，從系統程式到程序式與曲面" width="100%">
+</p>
+
+---
 
 ## 課程內容
 
@@ -32,16 +38,22 @@ python3 -m http.server 8080
 
 每課包含：公式說明、Canvas 互動演示、比較表與小測驗（進度存在 `localStorage`）。
 
-## 技術
-
-- 純 HTML / CSS / JS，無需建置
-- 適合 GitHub Pages 或本機 `http.server`
+---
 
 ## 建議用法
 
 1. 沿管線由上而下閱讀第 1–5 週。
 2. 每個演示都拖一拖參數，再用 WebGL / three.js 重寫同一概念。
 3. 考試週用小測驗暖身，手推一次 MVP 矩陣鏈。
+
+---
+
+## 技術
+
+- 純 HTML / CSS / JS，無需建置
+- 適合 GitHub Pages 或本機 `http.server`
+
+---
 
 ## 授權
 
